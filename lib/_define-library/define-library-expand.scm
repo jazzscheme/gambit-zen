@@ -118,12 +118,14 @@
                (path               (##vector-ref mod-info 6)))
 
            (vector
-            (read-libdef-sld mod-path
-                             reference-src
-                             module-ref
-                             port
-                             root
-                             path)
+             (let ((reader (cond ((assoc (car ext) library-kinds) => (lambda (p) (vector-ref (cdr p) 0)))
+                                 (else read-libdef-sld))))
+               (reader mod-path
+                       reference-src
+                       module-ref
+                       port
+                       root
+                       path))
              module-ref))
          (err reference-src)))))
 
@@ -148,16 +150,12 @@
        (##make-source src `#(,(string->symbol name))))
       (parse-define-library src import-name module-root modref-path))))
 
-(define (read-libdef-scm name reference-src import-name port)
-  (let ((src (read-first port)))
-    (parse-define-library src import-name #f #f)))
-
 (define library-kinds
   (list
    (cons ".sld"
          (vector read-libdef-sld))
    (cons ".scm"
-         (vector read-libdef-scm))))
+         (vector read-libdef-sld))))
 
 (define (library-kinds-set! x)
   (set! library-kinds x))
