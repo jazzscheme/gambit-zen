@@ -5464,12 +5464,8 @@
              (let ((module-descrs (##vector-ref result 0))
                    (script-line (##vector-ref result 2)))
                (script-callback script-line abs-path)
-               (##register-module-descrs module-descrs)
-               (##load-modules
-                (##map (lambda (md)
-                         (##vector-last
-                          (macro-module-descr-supply-modules md)))
-                       (##vector->list module-descrs)))
+               (let ((preload-module-refs (##register-module-descrs module-descrs)))
+                 (##load-modules preload-module-refs))
                (##path-unresolve abs-path))))))
 
   (define (load-no-ext psettings path)
