@@ -1413,8 +1413,8 @@
          -1 ;; don't change input
          (if highlight?
              (if dim?
-                 (macro-tty-text-attr bold bright-black yellow)
-                 (macro-tty-text-attr bold #f yellow))
+                 (macro-tty-text-attr bold bright-black cyan)
+                 (macro-tty-text-attr bold #f cyan))
              (if dim?
                  (macro-tty-text-attr normal bright-black #f)
                  (macro-tty-text-attr normal #f #f))))))
